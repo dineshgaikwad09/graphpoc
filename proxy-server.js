@@ -2,9 +2,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const gremlin = require('gremlin');
 const cors = require('cors');
+
+const fs = require('fs');
+const key = fs.readFileSync('./key.pem');
+const cert = fs.readFileSync('./cert.pem');
+const https = require('https');
+
 const app = express();
 const port = 3001;
 
+const server = https.createServer({key: key, cert: cert }, app);
 app.use(cors({
   credentials: true,
 }));
@@ -63,4 +70,4 @@ app.post('/query', (req, res, next) => {
     .catch((err) => next(err));
 });
 
-app.listen(port, () => console.log(`Simple gremlin-proxy server listening on port ${port}!`));
+server.listen(port, () => console.log(`Simple gremlin-proxy server listening on port ${port}!`));

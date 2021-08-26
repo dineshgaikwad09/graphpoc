@@ -1,7 +1,7 @@
 import { ACTIONS } from '../constants';
 
 const initialState = {
-  host: 'localhost',
+  host: 'database-1-safetygraph-instance-1.cmlqz8yt3jxv.us-east-1.neptune.amazonaws.com',
   port: '8182',
   query: '',
   error: null
