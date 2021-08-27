@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="shortcut icon" href="./gremlin-visualizer.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <style type="text/css">
+      .header {
+        width: 100%;
+      }
+
+      .mynetwork {
+        width: 100%;
+        height:100vh;
+        border: 1px solid lightgray;
+      }
+
+      .details {
+        width: 100%;
+      }
+    </style>
+
+    <link rel="stylesheet" href="./css/vendors.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+    <title>Graph - Admin Dashboard</title>
+    <link rel="icon" type="image/png" href="https://graph-neptune.com/olaf-admin/assets/img/favicon.png">
+    <style type="text/css">.apexcharts-canvas {
+      position: relative;
+      user-select: none;
+      /* cannot give overflow: hidden as it will crop tooltips which overflow outside chart area */
+      }
+      /* scrollbar is not visible by default for legend, hence forcing the visibility */
+      .apexcharts-canvas ::-webkit-scrollbar {
+      -webkit-appearance: none;
+      width: 6px;
+      }
+      .apexcharts-canvas ::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      background-color: rgba(0,0,0,.5);
+      box-shadow: 0 0 1px rgba(255,255,255,.5);
+      -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+      }
+      .apexcharts-canvas.dark {
+      background: #343F57;
+      }
+      .apexcharts-inner {
+      position: relative;
+      }
+      .legend-mouseover-inactive {
+      transition: 0.15s ease all;
+      opacity: 0.20;
+      }
+      .apexcharts-series-collapsed {
+      opacity: 0;
+      }
+      .apexcharts-gridline, .apexcharts-text {
+      pointer-events: none;
+      }
+      .apexcharts-tooltip {
+      border-radius: 5px;
+      box-shadow: 2px 2px 6px -4px #999;
+      cursor: default;
+      font-size: 14px;
+      left: 62px;
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      top: 20px;
+      overflow: hidden;
+      white-space: nowrap;
+      z-index: 12;
+      transition: 0.15s ease all;
+      }
+      .apexcharts-tooltip.light {
+      border: 1px solid #e3e3e3;
+      background: rgba(255, 255, 255, 0.96);
+      }
+      .apexcharts-tooltip.dark {
+      color: #fff;
+      background: rgba(30,30,30, 0.8);
+      }
+      .apexcharts-tooltip * {
+      font-family: inherit;
+      }
+      .apexcharts-tooltip .apexcharts-marker,
+      .apexcharts-area-series .apexcharts-area,
+      .apexcharts-line {
+      pointer-events: none;
+      }
+      .apexcharts-tooltip.active {
+      opacity: 1;
+      transition: 0.15s ease all;
+      }
+      .apexcharts-tooltip-title {
+      padding: 6px;
+      font-size: 15px;
+      margin-bottom: 4px;
+      }
+      .apexcharts-tooltip.light .apexcharts-tooltip-title {
+      background: #ECEFF1;
+      border-bottom: 1px solid #ddd;
+      }
+      .apexcharts-tooltip.dark .apexcharts-tooltip-title {
+      background: rgba(0, 0, 0, 0.7);
+      border-bottom: 1px solid #333;
+      }
+      .apexcharts-tooltip-text-value,
+      .apexcharts-tooltip-text-z-value {
+      display: inline-block;
+      font-weight: 600;
+      margin-left: 5px;
+      }
+      .apexcharts-tooltip-text-z-label:empty,
+      .apexcharts-tooltip-text-z-value:empty {
+      display: none;
+      }
+      .apexcharts-tooltip-text-value,
+      .apexcharts-tooltip-text-z-value {
+      font-weight: 600;
+      }
+      .apexcharts-tooltip-marker {
+      width: 12px;
+      height: 12px;
+      position: relative;
+      top: 0px;
+      margin-right: 10px;
+      border-radius: 50%;
+      }
+      .apexcharts-tooltip-series-group {
+      padding: 0 10px;
+      display: none;
+      text-align: left;
+      justify-content: left;
+      align-items: center;
+      }
+      .apexcharts-tooltip-series-group.active .apexcharts-tooltip-marker {
+      opacity: 1;
+      }
+      .apexcharts-tooltip-series-group.active, .apexcharts-tooltip-series-group:last-child {
+      padding-bottom: 4px;
+      }
+      .apexcharts-tooltip-series-group-hidden {
+      opacity: 0;
+      height: 0;
+      line-height: 0;
+      padding: 0 !important;
+      }
+      .apexcharts-tooltip-y-group {
+      padding: 6px 0 5px;
+      }
+      .apexcharts-tooltip-candlestick {
+      padding: 4px 8px;
+      }
+      .apexcharts-tooltip-candlestick > div {
+      margin: 4px 0;
+      }
+      .apexcharts-tooltip-candlestick span.value {
+      font-weight: bold;
+      }
+      .apexcharts-tooltip-rangebar {
+      padding: 5px 8px;
+      }
+      .apexcharts-tooltip-rangebar .category {
+      font-weight: 600;
+      color: #777;
+      }
+      .apexcharts-tooltip-rangebar .series-name {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+      }
+      .apexcharts-xaxistooltip {
+      opacity: 0;
+      padding: 9px 10px;
+      pointer-events: none;
+      color: #373d3f;
+      font-size: 13px;
+      text-align: center;
+      border-radius: 2px;
+      position: absolute;
+      z-index: 10;
+      background: #ECEFF1;
+      border: 1px solid #90A4AE;
+      transition: 0.15s ease all;
+      }
+      .apexcharts-xaxistooltip.dark {
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(0, 0, 0, 0.5);
+      color: #fff;
+      }
+      .apexcharts-xaxistooltip:after, .apexcharts-xaxistooltip:before {
+      left: 50%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      }
+      .apexcharts-xaxistooltip:after {
+      border-color: rgba(236, 239, 241, 0);
+      border-width: 6px;
+      margin-left: -6px;
+      }
+      .apexcharts-xaxistooltip:before {
+      border-color: rgba(144, 164, 174, 0);
+      border-width: 7px;
+      margin-left: -7px;
+      }
+      .apexcharts-xaxistooltip-bottom:after, .apexcharts-xaxistooltip-bottom:before {
+      bottom: 100%;
+      }
+      .apexcharts-xaxistooltip-top:after, .apexcharts-xaxistooltip-top:before {
+      top: 100%;
+      }
+      .apexcharts-xaxistooltip-bottom:after {
+      border-bottom-color: #ECEFF1;
+      }
+      .apexcharts-xaxistooltip-bottom:before {
+      border-bottom-color: #90A4AE;
+      }
+      .apexcharts-xaxistooltip-bottom.dark:after {
+      border-bottom-color: rgba(0, 0, 0, 0.5);
+      }
+      .apexcharts-xaxistooltip-bottom.dark:before {
+      border-bottom-color: rgba(0, 0, 0, 0.5);
+      }
+      .apexcharts-xaxistooltip-top:after {
+      border-top-color:#ECEFF1
+      }
+      .apexcharts-xaxistooltip-top:before {
+      border-top-color: #90A4AE;
+      }
+      .apexcharts-xaxistooltip-top.dark:after {
+      border-top-color:rgba(0, 0, 0, 0.5);
+      }
+      .apexcharts-xaxistooltip-top.dark:before {
+      border-top-color: rgba(0, 0, 0, 0.5);
+      }
+      .apexcharts-xaxistooltip.active {
+      opacity: 1;
+      transition: 0.15s ease all;
+      }
+      .apexcharts-yaxistooltip {
+      opacity: 0;
+      padding: 4px 10px;
+      pointer-events: none;
+      color: #373d3f;
+      font-size: 13px;
+      text-align: center;
+      border-radius: 2px;
+      position: absolute;
+      z-index: 10;
+      background: #ECEFF1;
+      border: 1px solid #90A4AE;
+      }
+      .apexcharts-yaxistooltip.dark {
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(0, 0, 0, 0.5);
+      color: #fff;
+      }
+      .apexcharts-yaxistooltip:after, .apexcharts-yaxistooltip:before {
+      top: 50%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      }
+      .apexcharts-yaxistooltip:after {
+      border-color: rgba(236, 239, 241, 0);
+      border-width: 6px;
+      margin-top: -6px;
+      }
+      .apexcharts-yaxistooltip:before {
+      border-color: rgba(144, 164, 174, 0);
+      border-width: 7px;
+      margin-top: -7px;
+      }
+      .apexcharts-yaxistooltip-left:after, .apexcharts-yaxistooltip-left:before {
+      left: 100%;
+      }
+      .apexcharts-yaxistooltip-right:after, .apexcharts-yaxistooltip-right:before {
+      right: 100%;
+      }
+      .apexcharts-yaxistooltip-left:after {
+      border-left-color: #ECEFF1;
+      }
+      .apexcharts-yaxistooltip-left:before {
+      border-left-color: #90A4AE;
+      }
+      .apexcharts-yaxistooltip-left.dark:after {
+      border-left-color: rgba(0, 0, 0, 0.5);
+      }
+      .apexcharts-yaxistooltip-left.dark:before {
+      border-left-color: rgba(0, 0, 0, 0.5);
+      }
+      .apexcharts-yaxistooltip-right:after {
+      border-right-color: #ECEFF1;
+      }
+      .apexcharts-yaxistooltip-right:before {
+      border-right-color: #90A4AE;
+      }
+      .apexcharts-yaxistooltip-right.dark:after {
+      border-right-color: rgba(0, 0, 0, 0.5);
+      }
+      .apexcharts-yaxistooltip-right.dark:before {
+      border-right-color: rgba(0, 0, 0, 0.5);
+      }
+      .apexcharts-yaxistooltip.active {
+      opacity: 1;
+      }
+      .apexcharts-yaxistooltip-hidden {
+      display: none;
+      }
+      .apexcharts-xcrosshairs, .apexcharts-ycrosshairs {
+      pointer-events: none;
+      opacity: 0;
+      transition: 0.15s ease all;
+      }
+      .apexcharts-xcrosshairs.active, .apexcharts-ycrosshairs.active {
+      opacity: 1;
+      transition: 0.15s ease all;
+      }
+      .apexcharts-ycrosshairs-hidden {
+      opacity: 0;
+      }
+      .apexcharts-zoom-rect {
+      pointer-events: none;
+      }
+      .apexcharts-selection-rect {
+      cursor: move;
+      }
+      .svg_select_points, .svg_select_points_rot {
+      opacity: 0;
+      visibility: hidden;
+      }
+      .svg_select_points_l, .svg_select_points_r {
+      cursor: ew-resize;
+      opacity: 1;
+      visibility: visible;
+      fill: #888;
+      }
+      .apexcharts-canvas.zoomable .hovering-zoom {
+      cursor: crosshair
+      }
+      .apexcharts-canvas.zoomable .hovering-pan {
+      cursor: move
+      }
+      .apexcharts-xaxis,
+      .apexcharts-yaxis {
+      pointer-events: none;
+      }
+      .apexcharts-zoom-icon,
+      .apexcharts-zoom-in-icon,
+      .apexcharts-zoom-out-icon,
+      .apexcharts-reset-zoom-icon,
+      .apexcharts-pan-icon,
+      .apexcharts-selection-icon,
+      .apexcharts-menu-icon,
+      .apexcharts-toolbar-custom-icon {
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+      line-height: 24px;
+      color: #6E8192;
+      text-align: center;
+      }
+      .apexcharts-zoom-icon svg,
+      .apexcharts-zoom-in-icon svg,
+      .apexcharts-zoom-out-icon svg,
+      .apexcharts-reset-zoom-icon svg,
+      .apexcharts-menu-icon svg {
+      fill: #6E8192;
+      }
+      .apexcharts-selection-icon svg {
+      fill: #444;
+      transform: scale(0.76)
+      }
+      .dark .apexcharts-zoom-icon svg,
+      .dark .apexcharts-zoom-in-icon svg,
+      .dark .apexcharts-zoom-out-icon svg,
+      .dark .apexcharts-reset-zoom-icon svg,
+      .dark .apexcharts-pan-icon svg,
+      .dark .apexcharts-selection-icon svg,
+      .dark .apexcharts-menu-icon svg,
+      .dark .apexcharts-toolbar-custom-icon svg{
+      fill: #f3f4f5;
+      }
+      .apexcharts-canvas .apexcharts-zoom-icon.selected svg,
+      .apexcharts-canvas .apexcharts-selection-icon.selected svg,
+      .apexcharts-canvas .apexcharts-reset-zoom-icon.selected svg {
+      fill: #008FFB;
+      }
+      .light .apexcharts-selection-icon:not(.selected):hover svg,
+      .light .apexcharts-zoom-icon:not(.selected):hover svg,
+      .light .apexcharts-zoom-in-icon:hover svg,
+      .light .apexcharts-zoom-out-icon:hover svg,
+      .light .apexcharts-reset-zoom-icon:hover svg,
+      .light .apexcharts-menu-icon:hover svg {
+      fill: #333;
+      }
+      .apexcharts-selection-icon, .apexcharts-menu-icon {
+      position: relative;
+      }
+      .apexcharts-reset-zoom-icon {
+      margin-left: 5px;
+      }
+      .apexcharts-zoom-icon, .apexcharts-reset-zoom-icon, .apexcharts-menu-icon {
+      transform: scale(0.85);
+      }
+      .apexcharts-zoom-in-icon, .apexcharts-zoom-out-icon {
+      transform: scale(0.7)
+      }
+      .apexcharts-zoom-out-icon {
+      margin-right: 3px;
+      }
+      .apexcharts-pan-icon {
+      transform: scale(0.62);
+      position: relative;
+      left: 1px;
+      top: 0px;
+      }
+      .apexcharts-pan-icon svg {
+      fill: #fff;
+      stroke: #6E8192;
+      stroke-width: 2;
+      }
+      .apexcharts-pan-icon.selected svg {
+      stroke: #008FFB;
+      }
+      .apexcharts-pan-icon:not(.selected):hover svg {
+      stroke: #333;
+      }
+      .apexcharts-toolbar {
+      position: absolute;
+      z-index: 11;
+      top: 0px;
+      right: 3px;
+      max-width: 176px;
+      text-align: right;
+      border-radius: 3px;
+      padding: 0px 6px 2px 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      }
+      .apexcharts-toolbar svg {
+      pointer-events: none;
+      }
+      .apexcharts-menu {
+      background: #fff;
+      position: absolute;
+      top: 100%;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      padding: 3px;
+      right: 10px;
+      opacity: 0;
+      min-width: 110px;
+      transition: 0.15s ease all;
+      pointer-events: none;
+      }
+      .apexcharts-menu.open {
+      opacity: 1;
+      pointer-events: all;
+      transition: 0.15s ease all;
+      }
+      .apexcharts-menu-item {
+      padding: 6px 7px;
+      font-size: 12px;
+      cursor: pointer;
+      }
+      .light .apexcharts-menu-item:hover {
+      background: #eee;
+      }
+      .dark .apexcharts-menu {
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      }
+      @media screen and (min-width: 768px) {
+      .apexcharts-toolbar {
+      /*opacity: 0;*/
+      }
+      .apexcharts-canvas:hover .apexcharts-toolbar {
+      opacity: 1;
+      }
+      }
+      .apexcharts-datalabel.hidden {
+      opacity: 0;
+      }
+      .apexcharts-pie-label,
+      .apexcharts-datalabel, .apexcharts-datalabel-label, .apexcharts-datalabel-value {
+      cursor: default;
+      pointer-events: none;
+      }
+      .apexcharts-pie-label-delay {
+      opacity: 0;
+      animation-name: opaque;
+      animation-duration: 0.3s;
+      animation-fill-mode: forwards;
+      animation-timing-function: ease;
+      }
+      .apexcharts-canvas .hidden {
+      opacity: 0;
+      }
+      .apexcharts-hide .apexcharts-series-points {
+      opacity: 0;
+      }
+      .apexcharts-area-series .apexcharts-series-markers .apexcharts-marker.no-pointer-events,
+      .apexcharts-line-series .apexcharts-series-markers .apexcharts-marker.no-pointer-events, .apexcharts-radar-series path, .apexcharts-radar-series polygon {
+      pointer-events: none;
+      }
+      /* markers */
+      .apexcharts-marker {
+      transition: 0.15s ease all;
+      }
+      @keyframes opaque {
+      0% {
+      opacity: 0;
+      }
+      100% {
+      opacity: 1;
+      }
+      }
+      /* Resize generated styles */
+      @keyframes resizeanim {
+      from {
+      opacity: 0;
+      }
+      to {
+      opacity: 0;
+      }
+      }
+      .resize-triggers {
+      animation: 1ms resizeanim;
+      visibility: hidden;
+      opacity: 0;
+      }
+      .resize-triggers, .resize-triggers > div, .contract-trigger:before {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      }
+      .resize-triggers > div {
+      background: #eee;
+      overflow: auto;
+      }
+      .contract-trigger:before {
+      width: 200%;
+      height: 200%;
+      }
+    </style>
+    <script src="chrome-extension://mooikfkahbdckldjjndioackbalphokd/assets/prompt.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/amazon-quicksight-embedding-sdk@1.0.2/dist/quicksight-embedding-js-sdk.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.517.0.min.js"></script>
+    <style>
+      iframe {border: 0;}
+      body {margin:0;}
+    </style>
+    <script>
+      var awsData = {
+        dashboardId: '',
+        dashboardRegion: '',
+        apiGatewayUrl:'https://4p83one4df.execute-api.us-east-1.amazonaws.com/test/getembedurl?',
+        cloudFrontUrl:'https://dhbq88qvkykiw.cloudfront.net',
+        cognitoUrl:'https://qse273850116132.auth.us-east-1.amazoncognito.com/login?client_id=418pcaehigjmoqu7mbvv70g3tn&response_type=token&scope=openid+profile&redirect_uri=https://54.235.62.3:3000/index.html',
+        debug: false
+      }
+
+      $(document).ready(function () {
+        //document.getElementById('logo').src = awsData.cloudFrontUrl+'/logo.png'
+        //On redirect from Cognito; Read out  state
+        //Setting client and dashboard id in url is just for demo implementation.
+        awsData.dashboardId = '024c326d-ef59-4f57-a5d4-bec95b4426c3';
+        awsData.dashboardRegion = 'us-east-1';
+
+        //Get OpenIdToken
+        var tokenPromise = getOpenIdToken();
+
+        tokenPromise.then(function(idToken) {
+          apiGatewayGetEmbedUrl(
+            awsData.apiGatewayUrl,
+            awsData.dashboardId,
+            awsData.dashboardRegion,
+            idToken
+          );
+        },
+        function(err)
+        {
+              console.log(err);
+        });
+      });
+
+      function writeDebugInfo(debugInfo){
+              // console.log(debugInfo);
+      }
+
+      function getCookie(name) {
+        var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+        return v ? v[2] : null;
+      }
+
+      function setCookie(name, value) {
+        document.cookie = name + "=" + value ;
+      }
+
+      function getParameterValues(param,slicer,delimiter) {
+        var urlParms = window.location.href.slice(window.location.href.indexOf(slicer)+ slicer.length).split(delimiter);
+        for (var i = 0; i < urlParms.length; i++) {
+          var urlparm = urlParms[i].split('=');
+          if (urlparm[0].toLowerCase() === param) {
+            setCookie(param, decodeURIComponent(urlparm[1]));
+            return decodeURIComponent(urlparm[1]);
+          }
+        }
+          return getCookie(param);
+      }
+
+      function parseJwt (token) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+      //Redirect to Cognito if user is not Signed in.
+      //Cognito will redirect back to this page and then the promise will be resolved.
+      function getOpenIdToken(){
+        return new Promise(function(resolve,reject) {
+            writeDebugInfo('In getOpenIdToken func');
+            var idToken = getParameterValues('id_token','#','&');
+            if (idToken ) {
+          writeDebugInfo('Token found');
+            }
+            else {
+                writeDebugInfo('Token not found, Redirecting to Cognito');
+                window.location.href = awsData.cognitoUrl;
+            }
+
+        resolve(idToken);
+        });
+      }
+
+      //Make APIGateway call to generate the embed url.
+      function apiGatewayGetEmbedUrl(
+        apiGatewayUrl,
+        dashboardId,
+        dashboardRegion,
+        openIdToken
+        ) {
+        const parameters = {
+            dashboardId: dashboardId,
+            dashboardRegion: dashboardRegion,
+            openIdToken: openIdToken
+        }
+
+        const myQueryString = $.param(parameters);
+        apiGatewayUrl = apiGatewayUrl + myQueryString;
+
+        const headers = { 'Content-Type' : 'application/json' }
+
+        axios.get(apiGatewayUrl, { headers: headers})
+          .then((response) => {
+              embedDashboard(response.data.EmbedUrl);;
+          })
+          .catch(function (error) {
+                  writeDebugInfo(error);
+                  console.log('Error obtaining QuickSight dashboard embed url.');
+          });
+      }
+
+      //Embed the generated url into the div identified to hold the dashboard.
+      function embedDashboard(embedUrl) {
+          var containerDiv = document.getElementById("dashboardContainer");
+          var params = {
+                  url: embedUrl,
+                  container: containerDiv,
+                  width:"100%",
+                  height:"100%"
+          };
+          var dashboard = QuickSightEmbedding.embedDashboard(params);
+      }
+
+    </script>
+    <title>Gremlin-Visualizer</title>
+  </head>
+  <body>
+    <div class="row" zn_id="12">
+        <div class="col-lg-12 col-md-12">
+          <div style="padding-top: 100px;" id="root"></div>
+          <div id="dashboardContainer"></div>
+        </div>
+     </div>
+    <script src="./js/vendors.min.js"></script>
+    <script src="./js/apexcharts.min.js"></script>
+    <script src="./js/apexcharts-stock-prices.js"></script>
+    <script src="./js/apexcharts-irregular-data-series.js"></script>
+    <script src="./js/apex-custom-line-chart.js"></script>
+    <script src="./js/apex-custom-pie-donut-chart.js"></script>
+    <script src="./js/apex-custom-area-charts.js"></script>
+    <script src="./js/apex-custom-column-chart.js"></script>
+    <script src="./js/apex-custom-bar-charts.js"></script>
+    <script src="./js/apex-custom-mixed-charts.js"></script>
+    <script src="./js/apex-custom-radialbar-charts.js"></script>
+    <script src="./js/apex-custom-radar-chart.js"></script>
+    <script src="./js/chartjs.min.js"></script>
+    <div class="chartjs-colors">
+       <div class="bg-primary"></div>
+       <div class="bg-primary-light"></div>
+       <div class="bg-secondary"></div>
+       <div class="bg-info"></div>
+       <div class="bg-success"></div>
+       <div class="bg-success-light"></div>
+       <div class="bg-danger"></div>
+       <div class="bg-warning"></div>
+       <div class="bg-purple"></div>
+       <div class="bg-pink"></div>
+    </div>
+    <script src="./js/jvectormap-1.2.2.min.js"></script>
+    <script src="./js/jvectormap-world-mill-en.js"></script>
+    <script src="./js/custom.js"></script>
+    <div class="jvectormap-label"></div>
+    <svg id="SvgjsSvg1254" width="2" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" style="overflow: hidden; top: -100%; left: -100%; position: absolute; opacity: 0;">
+       <defs id="SvgjsDefs1255"></defs>
+       <polyline id="SvgjsPolyline1256" points="0,0"></polyline>
+       <path id="SvgjsPath1257" d="M0 0 "></path>
+    </svg>
+ </body>
+</html>
