@@ -71,3 +71,4 @@ app.post('/query', (req, res, next) => {
 });
 
 server.listen(port, () => console.log(`Simple gremlin-proxy server listening on port ${port}!`));
+//app.listen(port, () => console.log(`Simple gremlin-proxy server listening on port ${port}!`));
