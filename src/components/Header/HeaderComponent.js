@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Hidden, TextField }  from '@material-ui/core';
+import { Button, TextField }  from '@material-ui/core';
 import axios from 'axios';
 import { ACTIONS, QUERY_ENDPOINT, COMMON_GREMLIN_ERROR } from '../../constants';
 import { onFetchQuery } from '../../logics/actionHelper';
