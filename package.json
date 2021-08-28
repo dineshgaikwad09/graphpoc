@@ -17,6 +17,7 @@
     "react-dom": "^16.12.0",
     "react-json-to-table": "^0.1.5",
     "react-redux": "^7.1.3",
+    "react-router-dom": "^5.2.1",
     "react-scripts": "^3.2.0",
     "redux": "^4.0.4",
     "redux-logger": "^3.0.6",
@@ -24,7 +25,7 @@
   },
   "proxy": "https://52.202.115.25:3001",
   "scripts": {
-    "client": "HTTPS=true SSL_CRT_FILE=./cert.pem SSL_KEY_FILE=./key.pem react-scripts start",
+    "client": "set HTTPS=true&&set SSL_CRT_FILE=./cert.pem&&set SSL_KEY_FILE=./key.pem&&react-scripts start",
     "server": "node proxy-server.js",
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "build": "react-scripts build",
