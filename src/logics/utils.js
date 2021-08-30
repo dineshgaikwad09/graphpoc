@@ -28,11 +28,24 @@ export const extractEdgesAndNodes = (nodeList, nodeLabels=[]) => {
       nodeLabels.push(nodeLabel);
       nodeLabelMap[type] = field;
     }
-    const labelField = nodeLabelMap[type];
-    const label = labelField in node.properties ? node.properties[labelField] : type;
-    nodes.push({ id: node.id, label: String(label), group: node.label, properties: node.properties, type });
+    var labelField = nodeLabelMap[type];
+    if(type === "Accident")
+    {
+      labelField = 'DOCUMENT_NO'
+      const label = labelField in node.properties ? node.properties[labelField] : type;
+      const newlabel = type + ':\n' + label
+      nodes.push({ id: node.id, label: String(newlabel), group: node.label, properties: node.properties, type });
 
-    edges = edges.concat(_.map(node.edges, edge => ({ ...edge, type: edge.label, arrows: { to: { enabled: true, scaleFactor: 0.5 } } })));
+      edges = edges.concat(_.map(node.edges, edge => ({ ...edge, type: edge.label, arrows: { to: { enabled: true, scaleFactor: 0.5 } } })));
+    }
+    else
+    {
+      const label = labelField in node.properties ? node.properties[labelField] : type;
+      const newlabel = type + ':\n' + label
+      nodes.push({ id: node.id, label: String(newlabel), group: node.label, properties: node.properties, type });
+
+      edges = edges.concat(_.map(node.edges, edge => ({ ...edge, type: edge.label, arrows: { to: { enabled: true, scaleFactor: 0.5 } } })));
+    }
   });
 
   return { edges, nodes, nodeLabels }

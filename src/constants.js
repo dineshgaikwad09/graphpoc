@@ -1,4 +1,4 @@
-const SERVER_URL = 'https://184.72.117.197:3001';
+const SERVER_URL = 'https://3.88.21.210:3001';
 export const QUERY_ENDPOINT = `${SERVER_URL}/query`;
 export const COMMON_GREMLIN_ERROR = 'Invalid query. Please execute a query to get a set of vertices';
 export const ACTIONS = {

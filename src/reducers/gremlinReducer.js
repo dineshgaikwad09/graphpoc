@@ -3,7 +3,7 @@ import { ACTIONS } from '../constants';
 const initialState = {
   host: 'database-1-safetygraph-instance-1.cmlqz8yt3jxv.us-east-1.neptune.amazonaws.com',
   port: '8182',
-  query: '',
+  query: 'g.V().limit(5)',
   error: null
 };
 
