@@ -23,7 +23,7 @@
     "redux-logger": "^3.0.6",
     "vis-network": "^6.4.4"
   },
-  "proxy": "https://3.88.21.210:3001",
+  "proxy": "https://44.194.15.198:3001",
   "scripts": {
     "client": "HTTPS=true SSL_CRT_FILE=./cert.pem SSL_KEY_FILE=./key.pem react-scripts start",
     "server": "node proxy-server.js",

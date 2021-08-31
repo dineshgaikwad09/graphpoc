@@ -66,7 +66,8 @@ app.post('/query', (req, res, next) => {
   const client = new gremlin.driver.Client(`wss://${gremlinHost}:${gremlinPort}/gremlin`, { traversalSource: 'g', mimeType: 'application/json' });
 
   client.submit(makeQuery(query, nodeLimit), {})
-    .then((result) => res.send(nodesToJson(result._items)))
+    .then((result) => 
+    res.send(nodesToJson(result._items)))
     .catch((err) => next(err));
 });
 
