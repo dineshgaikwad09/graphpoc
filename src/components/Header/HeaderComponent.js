@@ -6,6 +6,21 @@ import { ACTIONS, QUERY_ENDPOINT, COMMON_GREMLIN_ERROR } from '../../constants';
 import { onFetchQuery } from '../../logics/actionHelper';
 
 class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleLoad = this.handleLoad.bind(this);
+  }
+  componentDidMount() {
+    window.addEventListener('load', this.handleLoad);
+ }
+
+ componentWillUnmount() { 
+   window.removeEventListener('load', this.handleLoad)  
+ }
+
+ handleLoad() {
+  this.sendQuery()
+ }
   clearGraph() {
     this.props.dispatch({ type: ACTIONS.CLEAR_GRAPH });
     this.props.dispatch({ type: ACTIONS.CLEAR_QUERY_HISTORY });
